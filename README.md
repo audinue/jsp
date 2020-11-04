@@ -7,6 +7,8 @@
   data-target="container-selector"></script>
 ```
 
+`jsp-loading` is added to `<body>` when the page is loading.
+
 ```ts
 type Options = {
   index: string
@@ -29,6 +31,6 @@ type JspLocals = {
   post: Record<string, any> | undefined // from FormData in <form method="post">
   global: any
   include (file: string, data: any): Promise<string>
-  redirect(hash: string)
+  redirect (hash: string)
 }
 ```
