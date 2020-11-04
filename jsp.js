@@ -165,6 +165,7 @@ var Jsp = function () {
     }
 
     function renderPage (url) {
+      document.body.classList.add('jsp-loading')
       url = Object.assign({
         include: function (file, data) {
           data = Object.assign({}, url, data, {
@@ -173,13 +174,27 @@ var Jsp = function () {
           return renderPage(data)
         },
         redirect: function (hash) {
-          if (hash.charAt(0) !== '#') {
-            throw new Error('Redirect argument should be a hash.')
-          }
-          replacePage(parseHashUrl(hash))
+          setTimeout(function () {
+            if (hash.charAt(0) !== '#') {
+              throw new Error('Redirect argument should be a hash.')
+            }
+            replacePage(parseHashUrl(hash))
+          })
         }
       }, url)
       return renderFile(options.prefix + url.file, url)
+        .then(function (result) {
+          removeClass()
+          return result
+        })
+        .catch(function (error) {
+          removeClass()
+          throw error
+        })
+
+      function removeClass () {
+        document.body.classList.remove('jsp-loading')
+      }
     }
 
     function replacePage (url) {
